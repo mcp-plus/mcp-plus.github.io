@@ -1,2 +1,2 @@
-# mcp-plus.github.io
+# MCP+
 Website for MCP+

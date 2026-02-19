@@ -78,7 +78,7 @@ Last market date: 2025-02-18. Current context: regularMarketPrice 178.72.</div>
                     <li><strong>Web Search:</strong> Google Search (Serper API payloads)</li>
                     <li><strong>Browser Navigation:</strong> Playwright (raw HTML DOM)</li>
                 </ul>
-                <p>In each case we compared standard tool-use with an MCP+ configuration (powered by GPT-5-mini) to measure the delta in performance and inference cost.</p>
+                <p>In each case we compared standard tool-use with an MCP+ configuration (powered by GPT-5-mini) to measure the delta in performance and inference cost. We found that MCP+ leads to consistent cost savings while maintaining comparable performance when averaged across multiple runs. </p>
                 <figure class="article-figure">
                     <div id="bar-chart" class="chart-container"></div>
                     <p class="chart-legend" aria-hidden="true">
@@ -95,7 +95,7 @@ Last market date: 2025-02-18. Current context: regularMarketPrice 178.72.</div>
                 <h2 id="for-developers-heading">Demo</h2>
                 <h3 id="arbitrage">MCP+: Arbitrage for developers to preserve premium LLM context</h3>
                 <p>For developers using Cursor or Claude Code, context bloat is a direct drain on your innovation budget. When an MCP tool dumps 10,000 tokens of irrelevant metadata into your chat, it's stealing the tokens your model needs to refactor that function or debug that edge case.</p>
-                <p>MCP+ lets you do an economic arbitrage: by offloading the haystack sifting to a faster, cheaper model, you preserve your premium Claude Opus 4.5 context for what actually matters — writing code.</p>
+                <p>MCP+ lets you do an economic arbitrage: by offloading the haystack sifting to a cheaper model, you preserve your premium Claude Opus 4.5 context for what actually matters — writing code. While this orchestration step introduces a small latency overhead, the tradeoff is a leaner, more focused, and significantly more cost-effective inference cycle.</p>
                 <p>
                 <h4>Here are some demos showcasing MCP+ in action:</h4> 
                 <figure class="video-figure">

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP+: Precision Context Management for MCP Agents</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="page-header">
+            <div class="page-header-inner">
+                <a href="#" class="page-logo" aria-label="MCP+ home">
+                    <img src="assets/icons/plus-fill.svg" alt="" class="page-logo__icon" aria-hidden="true">
+                    <span class="page-logo__text">MCP+</span>
+                </a>
+                <nav class="primary" aria-label="Main">
+                    <a href="#about" data-section="about">About</a>
+                    <a href="#for-developers" data-section="for-developers">Demo</a>
+                    <a href="#installation" data-section="installation">Installation</a>
+                </nav>
+            </div>
+        </header>
+        <main id="main-content" class="main-content">
+            <div class="hero">
+                <h1 class="hero__title">MCP+ <br> Precision Context Management for MCP Agents</h1>
+                <p class="hero__description">A post-processing layer that wraps your MCP clients and returns only the needles—not the haystack—so you cut context bloat and cost without changing your agent.</p>
+                <div class="hero__buttons">
+                    <a href="https://github.com/SalesforceAIResearch/MCP-Universe/mcpuniverse/extensions/mcpplus" class="hero__btn" target="_blank" rel="noopener"><svg class="hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> Code</a>
+                </div>
+                <div class="hero__meta">
+                    <p class="hero__authors">Author Names<span class="hero__asterisk">*</span></p>
+                    <p class="hero__affiliation">Your Affiliation</p>
+                    <p class="hero__contact">Contact: <a href="mailto:contact@example.com">contact@example.com</a></p>
+                </div>
+            </div>
+            
+
+            <section id="about" aria-labelledby="about-heading">
+                <h2 id="about-heading">About</h2>
+                <p>The promise of Model Context Protocol (MCP) servers is seamless tool integration, but the reality is often indiscriminate context bloat. Every time an agent fetches a 1000-line HTML document just to find a single button's ID, you aren't just paying for those tokens once — the context bloat compounds with every subsequent turn in the conversation. The task agent is forced to find needles in the haystack while you foot the bill for the hay. This inflates costs, exhausts context windows, and distracts even the most capable LLMs.</p>
+                <p>To mitigate this context bloat, we built <strong>MCP+</strong>: a server-, agent-, and task-agnostic post-processing layer designed to sit as a protective wrapper around your MCP clients. Instead of forcing your primary task agent to sift through a mountain of hay, MCP+ intercepts the tool outputs and hands over only the needles.</p>
+
+                <figure class="article-figure">
+                    <div id="flow-c" class="chart-container"></div>
+                    <figcaption>MCP+ pipeline: without vs with MCP+ (before/after).</figcaption>
+                </figure>
+
+                <h3 id="expected-info">The power of the <code>expected_info</code> argument</h3>
+                <p>MCP+ acts as a pseudo-MCP-server; a layer that requires zero changes to your existing agent's logic. To your task agent, it looks like the same MCP server with the same tools, but with one powerful new capability: the <strong><code>expected_info</code></strong> argument. This allows the agent to call a tool and define the specific needle it needs before the haystack even reaches its context.</p>
+                <p>It's the difference between calling a tool for a 2000-line nested JSON data dump and asking for specific data values for User ID X, Y and Z — one is a context-clogging haystack; the other is the exact token-efficient answer. By offloading the haystack sifting to a more economical model (e.g. GPT-5-mini or Gemini-2.5-Flash), you stop burning premium tokens on noise and start investing them in reasoning.</p>
+
+                <h3>Example: Yahoo Finance</h3>
+                <p>Here's an example output from the Yahoo Finance MCP server, where the agent has called the tool <code>get_stock_info</code> with <code>ticker='AAPL'</code>:</p>
+                <div class="terminal-window">
+                    <div class="terminal-titlebar">Raw tool response (standard MCP)</div>
+                    <div class="terminal-body"><span class="comment"># Large JSON with metadata, history, etc. — ~2300 tokens</span>
+{ "symbol": "AAPL", "quoteType": "EQUITY", "regularMarketPrice": 178.72, ... }</div>
+                </div>
+                <p>Running the same task with MCP+ adds <code>expected_info</code>: e.g. <em>"Current timestamp or the last market date from the stock info to determine the current date context."</em> With that, MCP+ returns only the relevant slice to the task agent:</p>
+                <div class="terminal-window">
+                    <div class="terminal-titlebar">MCP+ filtered response</div>
+                    <div class="terminal-body"><span class="comment"># ~100 tokens — only what was requested</span>
+Last market date: 2025-02-18. Current context: regularMarketPrice 178.72.</div>
+                </div>
+                <p><strong>The number of tokens goes down from roughly ~2300 to ~100 (a ~95% reduction).</strong></p>
+
+                <h3 id="activation">Intelligent activation and cost control</h3>
+                <p>MCP+ uses an economical, low-latency model (e.g. GPT-5-mini) as a post-processing agent that performs both direct and code-based extraction to filter out the fluff while preserving the integrity of the original data. To keep the process efficient, we've included a <strong>customizable activation threshold</strong>: MCP+ only engages when the tool call output is large enough to threaten your context window or your budget. For smaller payloads, the data passes through untouched.</p>
+                <p>We also add guardrails that enforce a strict token ceiling, so the extracted output never exceeds the size of the original source. The result is a system that maximizes information density and delivers a consistent reduction in overhead without compromising performance.</p>
+
+                <h3 id="evaluation">Measuring the impact of MCP+ on performance and inference costs</h3>
+                <p>We ran a systematic evaluation across task domains, output formats, and agent LLMs. Using the MCP-Universe Benchmark, we measured the performance of Claude 4.0 Sonnet, GPT-5, and Gemini 3 Pro Preview as function-calling agents across:</p>
+                <ul>
+                    <li><strong>Financial Management:</strong> Yahoo Finance (structured JSON)</li>
+                    <li><strong>Web Search:</strong> Google Search (Serper API payloads)</li>
+                    <li><strong>Browser Navigation:</strong> Playwright (raw HTML DOM)</li>
+                </ul>
+                <p>In each case we compared standard tool-use with an MCP+ configuration (powered by GPT-5-mini) to measure the delta in performance and inference cost.</p>
+                <figure class="article-figure">
+                    <div id="bar-chart" class="chart-container"></div>
+                    <p class="chart-legend" aria-hidden="true">
+                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--mcp"></span> MCP+ Cost</span>
+                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--savings"></span> Extra Cost (Savings)</span>
+                    </p>
+                    <figcaption>Cost comparison: Standard vs MCP+ across domains and target LLMs (sample — labels/numbers can be updated).</figcaption>
+                </figure>
+
+               
+            </section>
+
+            <section id="for-developers" aria-labelledby="for-developers-heading">
+                <h2 id="for-developers-heading">Demo</h2>
+                <h3 id="arbitrage">MCP+: Arbitrage for developers to preserve premium LLM context</h3>
+                <p>For developers using Cursor or Claude Code, context bloat is a direct drain on your innovation budget. When an MCP tool dumps 10,000 tokens of irrelevant metadata into your chat, it's stealing the tokens your model needs to refactor that function or debug that edge case.</p>
+                <p>MCP+ lets you do an economic arbitrage: by offloading the haystack sifting to a faster, cheaper model, you preserve your premium Claude Opus 4.5 context for what actually matters — writing code.</p>
+                <p>
+                <h4>Here are some demos showcasing MCP+ in action:</h4> 
+                <figure class="video-figure">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/VIDEO_ID_CURSOR" title="MCP+ in Cursor (DX MCP)" allowfullscreen></iframe>
+                    </div>
+                    <figcaption>Demo: MCP+ in Cursor, filtering DX MCP tool outputs. Replace VIDEO_ID_CURSOR with your video ID.</figcaption>
+                </figure>
+                <figure class="video-figure">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/VIDEO_ID_CLAUDE" title="MCP+ in Claude Code (Context7)" allowfullscreen></iframe>
+                    </div>
+                    <figcaption>Demo: MCP+ in Claude Code, refining Context7 documentation responses. Replace VIDEO_ID_CLAUDE with your video ID.</figcaption>
+                </figure>
+            </section>
+
+            <section id="installation" aria-labelledby="installation-heading">
+                <h2 id="installation-heading">Installation</h2>
+                <p><strong>Prerequisites:</strong> Python 3.10+, OpenAI API key (or another economical LLM of your choice).</p>
+                <div class="terminal-window">
+                    <div class="terminal-titlebar">bash</div>
+                    <div class="terminal-body"><span class="comment"># Install MCP-Universe</span>
+<span class="prompt">$ </span>pip install mcpuniverse
+
+<span class="comment"># Set your API key</span>
+<span class="prompt">$ </span>export OPENAI_API_KEY=sk-...
+
+<span class="comment"># Wrap your existing MCP servers (requires path to client's MCP config file)</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json
+
+<span class="comment"># This creates -plus versions of all your MCP servers (e.g. github → github-plus).</span>
+
+<span class="comment"># Wrap specific servers only</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --servers github
+
+<span class="comment"># Adjust token threshold — MCP+ is invoked for responses beyond this length</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --token-threshold 300
+
+<span class="comment"># Use a different/cheaper model (default: gpt-4.1)</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --llm-model gpt-5-mini-2025-08-07
+
+<span class="comment"># Use Gemini instead of OpenAI</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json \
+    --llm-provider gemini \
+    --llm-model gemini-2.5-flash \
+    --llm-api-key-env GOOGLE_API_KEY
+
+<span class="comment"># Use Anthropic instead of OpenAI</span>
+<span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json \
+    --llm-provider anthropic \
+    --llm-model claude-haiku-4-5-20251001 \
+    --llm-api-key-env ANTHROPIC_API_KEY</div>
+                </div>
+                <p>Restart Cursor or Claude Code. Your servers now have <code>-plus</code> versions with intelligent filtering.</p>
+            </section>
+        </main>
+        <footer class="page-footer">
+            <p class="page-footer__attribution">
+                <a href="https://www.flaticon.com/free-icons/robot" title="robot icons">Robot icons created by Smashicons - Flaticon</a>
+                ·
+                <a href="https://www.flaticon.com/free-icons/quantity" title="quantity icons">Quantity icons created by kerismaker - Flaticon</a>
+                ·
+                <a href="https://www.flaticon.com/free-icons/server" title="server icons">Server icons created by Freepik - Flaticon</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            function loadCharts() {
+                var s = document.createElement("script");
+                s.src = "charts.js";
+                s.async = false;
+                document.body.appendChild(s);
+            }
+            function initNav() {
+                var nav = document.querySelector("nav.primary");
+                var main = document.getElementById("main-content");
+                var header = document.querySelector(".page-header");
+                if (!nav || !main) return;
+                var headerHeight = header ? header.offsetHeight : 100;
+                var links = nav.querySelectorAll("a[data-section]");
+                var sections = [];
+                links.forEach(function (a) {
+                    var id = a.getAttribute("data-section");
+                    var el = document.getElementById(id);
+                    if (el) sections.push({ el: el, link: a });
+                });
+                function scrollTopFor(el) {
+                    return Math.max(0, el.offsetTop - headerHeight);
+                }
+                function setActive() {
+                    var top = main.scrollTop + headerHeight;
+                    var active = null;
+                    for (var i = sections.length - 1; i >= 0; i--) {
+                        if (sections[i].el.offsetTop <= top) {
+                            active = sections[i];
+                            break;
+                        }
+                    }
+                    if (!active && sections.length) active = sections[0];
+                    links.forEach(function (a) { a.classList.remove("active"); });
+                    if (active) active.link.classList.add("active");
+                }
+                links.forEach(function (a) {
+                    a.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        var id = a.getAttribute("data-section");
+                        var el = document.getElementById(id);
+                        if (el && main) {
+                            main.scrollTo({ top: scrollTopFor(el), behavior: "smooth" });
+                            if (history.replaceState) history.replaceState(null, "", "#" + id);
+                        }
+                    });
+                });
+                main.addEventListener("scroll", setActive, { passive: true });
+                if (location.hash) {
+                    var el = document.getElementById(location.hash.slice(1));
+                    if (el) main.scrollTop = scrollTopFor(el);
+                }
+                setActive();
+            }
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", function () {
+                    loadCharts();
+                    initNav();
+                });
+            } else {
+                loadCharts();
+                setTimeout(initNav, 100);
+            }
+        })();
+    </script>
+</body>
+</html>

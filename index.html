@@ -125,7 +125,7 @@ Last market date: 2025-02-18. Current context: regularMarketPrice 178.72.</div>
 <span class="comment"># Wrap specific servers only</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --servers github
 
-<span class="comment"># Adjust token threshold — MCP+ is invoked for responses beyond this length</span>
+<span class="comment"># Adjust token threshold — MCP+ is invoked for responses beyond this length. If you specify a server, the threshold will apply only to that server.</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --token-threshold 300
 
 <span class="comment"># Use a different/cheaper model (default: gpt-4.1)</span>

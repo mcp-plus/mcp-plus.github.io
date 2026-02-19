@@ -75,8 +75,8 @@
     /* ========== FLOWCHART LAYOUT CONFIG ==========
      * All positions and sizes live here. Change one value to move/resize:
      * - rows.*     → vertical position (y) for: title, icon, iconLabel, arrowRequest, arrowRequestLabel, arrowResponse, haystack, haystackLabel, cost
-     * - left.*     → left half: agentX, serverX, centerX, arrowInset (label x follows agentX/serverX/centerX)
-     * - right.*    → right half: agentX, mcpplusX, serverX, centerX, arrowInset, box (label x follows same)
+     * - left.*     → left half: agentX, serverX, centerX, arrowInset (larger = shorter arrows), arrowRequestLabelX
+     * - right.*    → right half: same + arrowInset (larger = shorter arrows), arrowRequestLabelX, box, arrowStrokes
      * - labels.*   → font size (px) for: title, icon, arrow, arrowSmall, haystack, cost, boxTitle
      * - iconSizes  → agent, server, mcpplus, overflow (each in px; set independently for proportion)
      * - chart      → height, xDomain, yDomain, dividerX
@@ -89,42 +89,45 @@
             dividerX: 10
         },
         rows: {
-            title: 7.2,
+            title: 7.7,
             icon: 5.4,
-            iconLabel: 4.1,
-            arrowRequest: 5.5,
-            arrowRequestLabel: 6.25,
+            iconLabel: 4.0,
+            arrowRequest: 5.8,
+            arrowRequestLabel: 6.0,
             arrowResponse: 4.7,
-            haystack: 3.5,
-            haystackLabel: 3.2,
-            cost: 2.6
+            haystack: 4.7,
+            haystackLabel: 3.9,
+            cost: 2.4
         },
         labels: {
-            title: 12,
-            icon: 11,
+            title: 15,
+            icon: 12,
             arrow: 9,
             arrowSmall: 8,
-            haystack: 10,
-            cost: 10,
-            boxTitle: 10
+            haystack: 12,
+            cost: 12,
+            boxTitle: 12
         },
         left: {
             centerX: 4.75,
             agentX: 1.5,
             serverX: 7.5,
-            arrowInset: 1.5
+            arrowInset: 1.5,
+            arrowRequestLabelX: 4.75
         },
         right: {
             centerX: 15.25,
             agentX: 12.0,
             mcpplusX: 15.6,
-            serverX: 17.6,
-            arrowInset: 0.4,
-            box: { x1: 14.6, x2: 18.6, y1: 3.0, y2: 6.7 }
+            serverX: 18.6,
+            arrowInset: 1.0,
+            arrowRequestLabelX: 13.8,
+            box: { x1: 14.8, x2: 19.8, y1: 3.7, y2: 7.0 },
+            arrowStrokes: { request: 1.2, requestSub: 1, responseRed: 2, responseGreen: 1.2 }
         },
         iconSizes: {
-            agent: 85,
-            server: 55,
+            agent: 100,
+            server: 75,
             mcpplus: 45,
             overflow: 34
         }
@@ -167,21 +170,21 @@
                 x1: "x1", x2: "x2", y1: "y1", y2: "y2",
                 fill: "#fafafa", stroke: "#e2e8f0", strokeWidth: 1, rx: 8
             }),
-            Plot.text([{ x: R.centerX, y: R.box.y2 - 0.35, label: "MCP Enhanced" }], {
+            Plot.text([{ x: R.box.x1 + (R.box.x2 - R.box.x1) / 2, y: R.box.y2 - 0.35, label: "MCP Enhanced" }], {
                 x: "x", y: "y", text: "label", fill: "#64748b", fontWeight: "bold", fontSize: lbl.boxTitle, textAnchor: "middle"
             }),
             Plot.image(flowIconData, { x: "x", y: "y", src: "src", width: "w", height: "h" }),
             Plot.text([{ x: L.agentX, y: r.iconLabel, label: "Agent" }], {
-                x: "x", y: "y", text: "label", fill: "#5493d6", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
+                x: "x", y: "y", text: "label", fill: "#b60654ff", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.text([{ x: L.serverX, y: r.iconLabel, label: "Server" }], {
-                x: "x", y: "y", text: "label", fill: "#dfa84b", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
+                x: "x", y: "y", text: "label", fill: "#085cab", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.link([{ x1: L.agentX + L.arrowInset, y1: r.arrowRequest, x2: L.serverX - L.arrowInset, y2: r.arrowRequest }], {
                 x1: "x1", y1: "y1", x2: "x2", y2: "y2",
                 stroke: "#1a3232", strokeWidth: 2, markerEnd: "arrow"
             }),
-            Plot.text([{ x: L.centerX, y: r.arrowRequestLabel, label: "Tool Call Arguments" }], {
+            Plot.text([{ x: L.arrowRequestLabelX, y: r.arrowRequestLabel, label: "Tool Call Arguments" }], {
                 x: "x", y: "y", text: "label", fill: "#1a3232", fontSize: lbl.arrow, fontWeight: "bold", textAnchor: "middle"
             }),
             Plot.link([{ x1: L.serverX - L.arrowInset, y1: r.arrowResponse, x2: L.agentX + L.arrowInset, y2: r.arrowResponse }], {
@@ -195,34 +198,34 @@
                 x: "x", y: "y", text: "label", fill: "#a2372d", fontSize: lbl.cost, textAnchor: "middle"
             }),
             Plot.text([{ x: R.agentX, y: r.iconLabel, label: "Agent" }], {
-                x: "x", y: "y", text: "label", fill: "#5493d6", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
+                x: "x", y: "y", text: "label", fill: "#b60654ff", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.text([{ x: R.mcpplusX, y: r.iconLabel, label: "MCP+" }], {
-                x: "x", y: "y", text: "label", fill: "#70bf75", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
+                x: "x", y: "y", text: "label", fill: "#0b827cff", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.text([{ x: R.serverX, y: r.iconLabel, label: "Server" }], {
-                x: "x", y: "y", text: "label", fill: "#dfa84b", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
+                x: "x", y: "y", text: "label", fill: "#085cab", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.link([{ x1: R.agentX + R.arrowInset, y1: r.arrowRequest, x2: R.mcpplusX - R.arrowInset, y2: r.arrowRequest }], {
                 x1: "x1", y1: "y1", x2: "x2", y2: "y2",
-                stroke: "#1a3232", strokeWidth: 2, markerEnd: "arrow"
+                stroke: "#1a3232", strokeWidth: R.arrowStrokes.request, markerEnd: "arrow"
             }),
-            Plot.text([{ x: (R.agentX + R.mcpplusX) / 2, y: r.arrowRequestLabel, label: "Args + expected_info" }], {
+            Plot.text([{ x: R.arrowRequestLabelX, y: r.arrowRequestLabel, label: "Args + expected_info" }], {
                 x: "x", y: "y", text: "label", fill: "#1a3232", fontSize: lbl.arrowSmall, fontWeight: "bold", textAnchor: "middle"
             }),
             Plot.link([{ x1: R.mcpplusX + R.arrowInset, y1: r.arrowRequest, x2: R.serverX - R.arrowInset, y2: r.arrowRequest }], {
                 x1: "x1", y1: "y1", x2: "x2", y2: "y2",
-                stroke: "#1a3232", strokeWidth: 1.5, markerEnd: "arrow"
+                stroke: "#1a3232", strokeWidth: R.arrowStrokes.requestSub, markerEnd: "arrow"
             }),
             Plot.link([{ x1: R.serverX - R.arrowInset, y1: r.arrowResponse, x2: R.mcpplusX + R.arrowInset, y2: r.arrowResponse }], {
                 x1: "x1", y1: "y1", x2: "x2", y2: "y2",
-                stroke: "#a2372d", strokeWidth: 3, markerEnd: "arrow"
+                stroke: "#a2372d", strokeWidth: R.arrowStrokes.responseRed, markerEnd: "arrow"
             }),
             Plot.link([{ x1: R.mcpplusX - R.arrowInset, y1: r.arrowResponse, x2: R.agentX + R.arrowInset, y2: r.arrowResponse }], {
                 x1: "x1", y1: "y1", x2: "x2", y2: "y2",
-                stroke: "#1c3326", strokeWidth: 2, markerEnd: "arrow"
+                stroke: "#1c3326", strokeWidth: R.arrowStrokes.responseGreen, markerEnd: "arrow"
             }),
-            Plot.text([{ x: (R.agentX + R.mcpplusX) / 2, y: r.haystackLabel, label: "📍 Needle" }], {
+            Plot.text([{ x: (R.agentX + R.mcpplusX) / 2, y: r.arrowResponse - 0.3, label: "📍 Needle" }], {
                 x: "x", y: "y", text: "label", fill: "#1c3326", fontSize: lbl.haystack, fontWeight: "bold", textAnchor: "middle"
             }),
             Plot.text([{ x: R.centerX, y: r.cost, label: "😎 Upto 80% cost savings" }], {

@@ -122,7 +122,9 @@ body {
 .hero__btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
+    min-width: 9rem;
     padding: 0.6rem 1.25rem;
     background: #085CAB;
     color: #fff;

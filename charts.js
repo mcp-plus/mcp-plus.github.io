@@ -34,43 +34,73 @@
     });
     barData = barData.reduce(function (a, b) { return a.concat(b); }, []);
 
-    var barPlot = Plot.plot({
-        width: layoutWidth,
-        height: 320,
-        marginLeft: 60,
-        marginBottom: 80,
-        marginRight: 20,
-        marginTop: 30,
-        x: { label: null, axis: "bottom", tickRotate: -30 },
-        y: { label: "Cost per Task ($)", domain: [0, 0.55], tickFormat: function (d) { return "$" + d.toFixed(2); }, grid: true },
-        fx: { label: null, padding: 0.2 },
-        color: {
-            domain: ["MCP+ Cost", "Extra Cost (Savings)"],
-            range: ["#70bf75", "#a2372d"],
-            legend: false
-        },
-        marks: [
-            Plot.barY(barData, Plot.stackY({
-                x: "model",
-                y: "cost",
-                fx: "domain",
-                fill: "type",
-                stroke: "#333333",
-                strokeWidth: 1,
-                order: ["MCP+ Cost", "Extra Cost (Savings)"],
-                tip: true,
-                title: function (d) {
-                    return d.type + "\n" + d.model + "\nDomain: " + d.domain + "\nCost: $" + d.cost.toFixed(2);
-                }
-            })),
-            Plot.ruleY([0])
-        ],
-        style: {
-            background: "transparent",
-            fontSize: "11px",
-            fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-        }
+    /* Domains for faceting; each will get its own plot with independent y-scale */
+    var domains = ["Playwright", "YFinance", "Google Search"];
+
+    function maxCostForDomain(domain) {
+        var rows = scatterData.filter(function (d) { return d.domain === domain; });
+        if (!rows.length) return 0.5;
+        var max = 0;
+        rows.forEach(function (d) { if (d.costStd > max) max = d.costStd; });
+        /* Round up to a nice tick (e.g. 0.48 -> 0.5, 0.25 -> 0.3) */
+        var step = max <= 0.1 ? 0.02 : max <= 0.3 ? 0.05 : 0.1;
+        return Math.ceil(max / step) * step + step * 0.2;
+    }
+
+    var barChartWrapper = document.createElement("div");
+    barChartWrapper.className = "bar-chart-facets";
+    barChartWrapper.setAttribute("style", "display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; justify-content: center; width: 100%;");
+
+    domains.forEach(function (domain) {
+        var subset = barData.filter(function (d) { return d.domain === domain; });
+        var yMax = maxCostForDomain(domain);
+        var plotDiv = document.createElement("div");
+        plotDiv.className = "bar-chart-facet";
+        plotDiv.setAttribute("style", "flex: 1 1 280px; min-width: 260px; max-width: 400px;");
+        var titleEl = document.createElement("div");
+        titleEl.setAttribute("style", "font-size: 0.95rem; font-weight: 600; color: #032d60; margin-bottom: 0.5rem; text-align: center;");
+        titleEl.textContent = domain;
+        plotDiv.appendChild(titleEl);
+        var subPlot = Plot.plot({
+            width: 320,
+            height: 280,
+            marginLeft: 52,
+            marginBottom: 70,
+            marginRight: 16,
+            marginTop: 8,
+            x: { label: null, axis: "bottom", tickRotate: -25 },
+            y: { label: "Cost per Task ($)", domain: [0, yMax], tickFormat: function (d) { return "$" + d.toFixed(2); }, grid: true },
+            color: {
+                domain: ["MCP+ Cost", "Extra Cost (Savings)"],
+                range: ["#70bf75", "#a2372d"],
+                legend: false
+            },
+            marks: [
+                Plot.barY(subset, Plot.stackY({
+                    x: "model",
+                    y: "cost",
+                    fill: "type",
+                    stroke: "#333333",
+                    strokeWidth: 1,
+                    order: ["MCP+ Cost", "Extra Cost (Savings)"],
+                    tip: true,
+                    title: function (d) {
+                        return d.type + "\n" + d.model + "\nCost: $" + d.cost.toFixed(2);
+                    }
+                })),
+                Plot.ruleY([0])
+            ],
+            style: {
+                background: "transparent",
+                fontSize: "11px",
+                fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+            }
+        });
+        plotDiv.appendChild(subPlot);
+        barChartWrapper.appendChild(plotDiv);
     });
+
+    barEl.appendChild(barChartWrapper);
 
     /* ========== FLOWCHART LAYOUT CONFIG ==========
      * All positions and sizes live here. Change one value to move/resize:
@@ -243,7 +273,6 @@
         }
     });
 
-    barEl.appendChild(barPlot);
     flowEl.appendChild(flowC);
 
     /* Make SVGs responsive: stretch to 100% of container width (same as surrounding text) */
@@ -257,7 +286,9 @@
         svg.setAttribute("height", "auto");
         svg.style.maxWidth = "100%";
     }
-    makeSvgResponsive(barPlot);
+    barChartWrapper.querySelectorAll(".bar-chart-facet").forEach(function (facet) {
+        makeSvgResponsive(facet);
+    });
     makeSvgResponsive(flowC);
 
 })();

@@ -3,7 +3,8 @@
    ============================================================================= */
 
 :root {
-    --page-max-width: min(1200px, 92vw);
+    /* Content width: sections (About, Demo, Installation) and header use this. Increase px or vw for a wider layout. */
+    --page-max-width: min(1600px, 100vw);
     --section-spacing: 3rem;
     --header-color: #032d60;
     --header-color-hover: #0a3d7a;
@@ -53,7 +54,7 @@ body {
 }
 
 .page-header-inner {
-    max-width: min(1200px, 92vw);
+    max-width: var(--page-max-width);
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -84,7 +85,8 @@ body {
 }
 
 .hero {
-    max-width: min(900px, 92vw);
+    /* Hero (title, blurb, buttons) width. Can match --page-max-width or stay narrower. */
+    max-width: min(1000px, 95vw);
     margin: 0 auto;
     padding: 3.5rem 0 4rem;
     text-align: center;
@@ -136,6 +138,28 @@ body {
     transform: translateY(-1px);
 }
 
+button.hero__btn {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+button.hero__btn:focus-visible {
+    outline: 2px solid #085CAB;
+    outline-offset: 2px;
+}
+
+.hero__quickstart-terminal {
+    margin-top: 1.25rem;
+    width: 100%;
+    text-align: left;
+}
+
+.hero__quickstart-terminal[hidden] {
+    display: none;
+}
+
 .hero__btn-icon {
     width: 18px;
     height: 18px;
@@ -183,6 +207,7 @@ body {
     min-height: 0;
     min-width: 0;
     width: 100%;
+    text-align: left;
     max-width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
@@ -197,6 +222,7 @@ body {
     padding: var(--section-spacing) 0;
     min-width: 0;
     overflow-x: hidden;
+    text-align: left;
 }
 
 section h2 {
@@ -204,6 +230,7 @@ section h2 {
     font-weight: 600;
     color: var(--header-color);
     font-size: 1.5rem;
+    text-align: left;
 }
 
 section h3 {
@@ -211,11 +238,17 @@ section h3 {
     font-weight: 600;
     color: var(--header-color);
     font-size: 1.25rem;
+    text-align: left;
+}
+
+section h4 {
+    text-align: left;
 }
 
 section p, section ul {
     margin: 0 0 1rem 0;
     color: #334155;
+    text-align: left;
 }
 
 section code {
@@ -294,7 +327,7 @@ nav.primary a.active {
     padding: 1.5rem 1.5rem 2rem;
     border-top: 1px solid #e2e8f0;
     background: #f8fafc;
-    text-align: center;
+    text-align: left;
 }
 
 .page-footer__attribution {
@@ -366,7 +399,7 @@ nav.primary a.active {
 }
 
 .video-figure {
-    margin: 2rem auto;
+    margin: 2rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -376,7 +409,7 @@ nav.primary a.active {
 .video-wrapper {
     position: relative;
     width: 100%;
-    max-width: 700px;
+    max-width: 100%;
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
@@ -424,6 +457,7 @@ nav.primary a.active {
     font-size: 1rem;
     white-space: pre-wrap;
     word-break: break-word;
+    text-align: left;
 }
 
 .terminal-window--expandable .terminal-body {

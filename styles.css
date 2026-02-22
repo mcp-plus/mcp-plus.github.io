@@ -422,6 +422,12 @@ nav.primary a.active {
     padding: 1.25rem 1.5rem;
     font-family: ui-monospace, Monaco, Consolas, monospace;
     font-size: 1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.terminal-window--expandable .terminal-body {
+    padding: 0.2rem 0.75rem 0.35rem;
     line-height: 1.5;
     white-space: pre-wrap;
     word-break: break-word;
@@ -433,6 +439,69 @@ nav.primary a.active {
 
 .terminal-body .comment {
     color: #6a9955;
+}
+
+/* Expandable terminal: show ~5–6 lines by default, full content when expanded */
+.terminal-body__scroll-wrap {
+    display: block;
+    text-align: left;
+}
+
+.terminal-body__scroll-wrap > .comment {
+    display: block;
+    margin: 0;
+}
+
+.terminal-body__scroll-wrap pre {
+    margin: 0;
+    white-space: pre;
+}
+
+/* No gap between comment and data in expandable terminal */
+
+/* Collapsed: fixed height so 5–6 lines of content + summary line visible */
+#raw-output-terminal .terminal-body__scroll-wrap {
+    height: 18rem;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.terminal-window--expandable .terminal-body__scroll-wrap {
+    height: 18rem;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.terminal-window--expandable.is-expanded .terminal-body__scroll-wrap,
+#raw-output-terminal.is-expanded .terminal-body__scroll-wrap {
+    height: auto;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.terminal-window--expandable .terminal-expand-btn {
+    margin-top: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.terminal-expand-btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: #323232;
+    color: #ccc;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.terminal-expand-btn:hover {
+    background: #404040;
+    color: #fff;
 }
 
 [class*="plot-tip"],

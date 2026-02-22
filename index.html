@@ -230,14 +230,51 @@ CODE-BASED EXTRACTION:
                 }
                 setActive();
             }
+            function initExpandableTerminal() {
+                var terminal = document.getElementById("raw-output-terminal");
+                if (!terminal) return;
+                var btn = terminal.querySelector(".terminal-expand-btn");
+                var commentEl = document.getElementById("raw-output-comment");
+                var contentEl = document.getElementById("raw-output-content");
+                if (btn) {
+                    btn.addEventListener("click", function () {
+                        var expanded = terminal.classList.toggle("is-expanded");
+                        btn.setAttribute("aria-expanded", expanded);
+                        btn.textContent = expanded ? "Collapse" : "Expand to see full output";
+                    });
+                }
+                if (commentEl && contentEl) {
+                    var wrapLength = 120;
+                    function wrapAtLength(str, len) {
+                        var out = [];
+                        for (var i = 0; i < str.length; i += len) {
+                            out.push(str.slice(i, i + len));
+                        }
+                        return out.join("\n");
+                    }
+                    fetch("data/raw-output.txt")
+                        .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error("Failed to load")); })
+                        .then(function (text) {
+                            contentEl.textContent = wrapAtLength(text, wrapLength);
+                            var n = text.length;
+                            commentEl.textContent = "# Total characters: " + n.toLocaleString() + " — expand below to see full output";
+                        })
+                        .catch(function () {
+                            commentEl.textContent = "# Could not load data/raw-output.txt — add the file and paste your output there.";
+                        });
+                }
+            }
+
             if (document.readyState === "loading") {
                 document.addEventListener("DOMContentLoaded", function () {
                     loadCharts();
                     initNav();
+                    initExpandableTerminal();
                 });
             } else {
                 loadCharts();
                 setTimeout(initNav, 100);
+                initExpandableTerminal();
             }
         })();
     </script>

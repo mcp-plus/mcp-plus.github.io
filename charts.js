@@ -92,11 +92,11 @@
             title: 7.7,
             icon: 5.4,
             iconLabel: 4.0,
-            arrowRequest: 5.8,
+            arrowRequest: 5.6,
             arrowRequestLabel: 6.0,
-            arrowResponse: 4.7,
-            haystack: 4.7,
-            haystackLabel: 3.9,
+            arrowResponse: 4.9,
+            haystack: 4.9,
+            haystackLabel: 4.2,
             cost: 2.4
         },
         labels: {
@@ -112,7 +112,7 @@
             centerX: 4.75,
             agentX: 1.5,
             serverX: 7.5,
-            arrowInset: 1.5,
+            arrowInset: 1.6,
             arrowRequestLabelX: 4.75
         },
         right: {
@@ -123,7 +123,7 @@
             arrowInset: 1.0,
             arrowRequestLabelX: 13.8,
             box: { x1: 14.8, x2: 19.8, y1: 3.7, y2: 7.0 },
-            arrowStrokes: { request: 1.2, requestSub: 1, responseRed: 2, responseGreen: 1.2 }
+            arrowStrokes: { request: 1.5, requestSub: 1.5, responseRed: 2, responseGreen: 1.5 }
         },
         iconSizes: {
             agent: 100,
@@ -200,7 +200,7 @@
             Plot.text([{ x: R.agentX, y: r.iconLabel, label: "Agent" }], {
                 x: "x", y: "y", text: "label", fill: "#b60654ff", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
-            Plot.text([{ x: R.mcpplusX, y: r.iconLabel, label: "MCP+" }], {
+            Plot.text([{ x: R.mcpplusX, y: r.iconLabel + 0.5, label: "MCP+" }], {
                 x: "x", y: "y", text: "label", fill: "#0b827cff", fontWeight: "bold", fontSize: lbl.icon, textAnchor: "middle"
             }),
             Plot.text([{ x: R.serverX, y: r.iconLabel, label: "Server" }], {

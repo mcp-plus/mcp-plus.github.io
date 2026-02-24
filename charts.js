@@ -45,6 +45,15 @@
         "Gemini-3-Pro": { src: "assets/logos/google-color.svg" }
     };
 
+    function resolveLogoUrl(logoInfo) {
+        if (!logoInfo) return "";
+        if (logoInfo.src) {
+            var s = logoInfo.src;
+            return (s.indexOf("http") === 0 || s.indexOf("//") === 0) ? s : new URL(s, window.location.href).href;
+        }
+        return "https://cdn.simpleicons.org/" + (logoInfo.name || "openai") + "/" + (logoInfo.color || "666");
+    }
+
     function buildPerfTable(data) {
         var wrap = document.createElement("div");
         wrap.className = "perf-table-wrap";
@@ -71,7 +80,7 @@
             sub.forEach(function (d) {
                 var tr = document.createElement("tr");
                 var logoInfo = modelToLogo[d.model] || { name: "openai", color: "666" };
-                var logoUrl = logoInfo.src || ("https://cdn.simpleicons.org/" + logoInfo.name + "/" + (logoInfo.color || "666"));
+                var logoUrl = resolveLogoUrl(logoInfo);
                 tr.innerHTML =
                     "<td class=\"perf-table__model-cell\"><span class=\"perf-table__model-inner\"><img class=\"perf-table__logo\" src=\"" + logoUrl + "\" alt=\"\" width=\"20\" height=\"20\">" + d.model + "</span></td>" +
                     "<td>" + d.perfStd + "</td><td>" + d.perfMcp + "</td>";
@@ -179,7 +188,7 @@
         var iconWraps = [];
         tickInfos.forEach(function (item) {
             var logoInfo = modelToLogo[item.modelName] || { name: "openai", color: "666" };
-            var logoUrl = logoInfo.src || ("https://cdn.simpleicons.org/" + logoInfo.name + "/" + (logoInfo.color || "666"));
+            var logoUrl = resolveLogoUrl(logoInfo);
             var iconWrap = document.createElement("div");
             iconWrap.className = "chart-x-icon-wrap";
             iconWrap.style.left = "0px";

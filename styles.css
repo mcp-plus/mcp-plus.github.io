@@ -311,6 +311,87 @@ nav.primary a.active {
     display: block;
 }
 
+/* Performance accuracy table (above bar chart) */
+.perf-table-wrap {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.perf-table-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--header-color);
+}
+
+.chart-title {
+    margin-top: 1.5rem;
+}
+
+.perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.perf-table th,
+.perf-table td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e2e8f0;
+}
+
+.perf-table thead th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: var(--header-color);
+}
+
+.perf-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.perf-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.perf-table__domain-header {
+    font-weight: 600;
+    color: var(--header-color);
+    background: #e2e8f0 !important;
+}
+
+.perf-table__model-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.perf-table__logo {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.perf-table__spacer td {
+    height: 0.75rem;
+    padding: 0;
+    border: none;
+    background: transparent !important;
+}
+
+.perf-table__delta--pos {
+    color: #166534;
+    font-weight: 500;
+}
+
+.perf-table__delta--neg {
+    color: #991b1b;
+    font-weight: 500;
+}
+
 .article-figure {
     margin: 2rem 0;
     width: 100%;
@@ -356,6 +437,40 @@ nav.primary a.active {
     margin: 0.75rem 0 0 0;
     font-size: 0.9rem;
     color: #64748b;
+}
+
+.chart-container .chart-legend {
+    margin: 0.5rem 0 1.25rem 0;
+}
+
+.chart-facet-plot-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.chart-x-icons-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 68px;
+    right: 16px;
+    height: 28px;
+    pointer-events: none;
+}
+
+.chart-x-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-x-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .chart-legend__item {

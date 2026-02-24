@@ -18,6 +18,7 @@
                 </a>
                 <nav class="primary" aria-label="Main">
                     <a href="#about" data-section="about">About</a>
+                    <a href="#results" data-section="results">Results</a>
                     <a href="#for-developers" data-section="for-developers">Demo</a>
                     <a href="#installation" data-section="installation">Installation</a>
                 </nav>
@@ -103,22 +104,27 @@ CODE-BASED EXTRACTION:
                 <h3 id="activation">Intelligent activation and cost control</h3>
                 <p>MCP+ uses an economical, low-latency model (e.g. GPT-5-mini) as a post-processing agent that performs both direct and code-based extraction to filter out the fluff while preserving the integrity of the original data. To keep the process efficient, we've included a <strong>customizable activation threshold</strong>: MCP+ only engages when the tool call output is large enough to threaten your context window or your budget. For smaller payloads, the data passes through untouched.</p>
                 <p>We also add guardrails that enforce a strict token ceiling, so the extracted output never exceeds the size of the original source. The result is a system that maximizes information density and delivers a consistent reduction in overhead without compromising performance.</p>
+            </section>
 
+                <section id="results" aria-labelledby="results-heading">
+                    <h2 id="results-heading">Results</h2>
                 <h3 id="evaluation">Measuring the impact of MCP+ on performance and inference costs</h3>
                 <p>We ran a systematic evaluation across task domains, output formats, and agent LLMs. Using the MCP-Universe Benchmark, we measured the performance of Claude 4.0 Sonnet, GPT-5, and Gemini 3 Pro Preview as function-calling agents across:</p>
                 <ul>
+                    <li><strong>Browser Navigation:</strong> Playwright (raw HTML DOM)</li>                    
                     <li><strong>Financial Management:</strong> Yahoo Finance (structured JSON)</li>
                     <li><strong>Web Search:</strong> Google Search (Serper API payloads)</li>
-                    <li><strong>Browser Navigation:</strong> Playwright (raw HTML DOM)</li>
+                    
+                    
                 </ul>
                 <p>In each case we compared standard tool-use with an MCP+ configuration (powered by GPT-5-mini) to measure the delta in performance and inference cost. We found that MCP+ leads to consistent cost savings while maintaining comparable performance when averaged across multiple runs. </p>
                 <figure class="article-figure">
                     <div id="bar-chart" class="chart-container"></div>
                     <p class="chart-legend" aria-hidden="true">
-                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--mcp"></span> MCP+ Cost</span>
-                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--savings"></span> Extra Cost (Savings)</span>
+                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--mcp"></span> Input Cost with MCP+</span>
+                        <span class="chart-legend__item"><span class="chart-legend__swatch chart-legend__swatch--savings"></span> Baseline Extra Cost (Savings)</span>
                     </p>
-                    <figcaption>Cost comparison: Standard vs MCP+ across domains and target LLMs (sample — labels/numbers can be updated).</figcaption>
+                    <figcaption>Performance and Cost comparison: Standard vs MCP+ across domains and target LLMs.</figcaption>
                 </figure>
 
                

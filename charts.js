@@ -20,10 +20,10 @@
         { domain: "Playwright", model: "Gemini-3-Pro", perfStd: 37.6, perfMcp: 0.0, costStd: 92.48, costMcp: 0.0 },
         { domain: "Yahoo Finance", model: "Claude 4.0 Sonnet", perfStd: 62.5, perfMcp: 66.7, costStd: 7.83, costMcp: 3.0 },
         { domain: "Yahoo Finance", model: "GPT-5", perfStd: 65.0, perfMcp: 70.8, costStd: 3.06, costMcp: 1.23 },
-        { domain: "Yahoo Finance", model: "Gemini-3-Pro", perfStd: 62.5, perfMcp: 0.0, costStd: 5.93, costMcp: 0.0 },
+        { domain: "Yahoo Finance", model: "Gemini-3-Pro", perfStd: 62.5, perfMcp: 67.5, costStd: 5.93, costMcp: 1.96 },
         { domain: "Google Search", model: "Claude 4.0 Sonnet", perfStd: 17.8, perfMcp: 20.6, costStd: 88.72, costMcp: 47.84 },
         { domain: "Google Search", model: "GPT-5", perfStd: 41.8, perfMcp: 41.8, costStd: 23.46, costMcp: 15.7 },
-        { domain: "Google Search", model: "Gemini-3-Pro", perfStd: 46.7, perfMcp: 0.0, costStd: 43.53, costMcp: 0.00 }
+        { domain: "Google Search", model: "Gemini-3-Pro", perfStd: 46.7, perfMcp: 44.8, costStd: 43.53, costMcp: 31.82 }
     ];
 
     var barData = scatterData.map(function (d) {
@@ -413,7 +413,7 @@
                 x1: "x1", x2: "x2", y1: "y1", y2: "y2",
                 fill: "#fafafa", stroke: "#e2e8f0", strokeWidth: 1, rx: 8
             }),
-            Plot.text([{ x: R.box.x1 + (R.box.x2 - R.box.x1) / 2, y: R.box.y2 - 0.35, label: "MCP Enhanced" }], {
+            Plot.text([{ x: R.box.x1 + (R.box.x2 - R.box.x1) / 2, y: R.box.y2 - 0.35, label: "MCP+ Enhanced" }], {
                 x: "x", y: "y", text: "label", fill: "#64748b", fontWeight: "bold", fontSize: lbl.boxTitle, textAnchor: "middle"
             }),
             Plot.image(flowIconData, { x: "x", y: "y", src: "src", width: "w", height: "h" }),
@@ -471,7 +471,7 @@
             Plot.text([{ x: (R.agentX + R.mcpplusX) / 2, y: r.arrowResponse - 0.3, label: "📍 Needle" }], {
                 x: "x", y: "y", text: "label", fill: "#1c3326", fontSize: lbl.haystack, fontWeight: "bold", textAnchor: "middle"
             }),
-            Plot.text([{ x: R.centerX, y: r.cost, label: "😎 Upto 80% cost savings" }], {
+            Plot.text([{ x: R.centerX, y: r.cost, label: "😎 Upto 75% cost savings" }], {
                 x: "x", y: "y", text: "label", fill: "#2d5a30", fontSize: lbl.cost, textAnchor: "middle"
             }),
             Plot.image([

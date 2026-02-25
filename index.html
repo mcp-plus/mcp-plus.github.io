@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCP+: Precision Context Management for MCP Agents</title>
+    <link rel="icon" href="assets/icons/plus-fill.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
@@ -27,7 +28,7 @@
         <main id="main-content" class="main-content">
             <div class="hero">
                 <h1 class="hero__title">MCP+ <br> Precision Context Management for MCP Agents</h1>
-                <p class="hero__description">A post-processing layer that wraps your MCP clients and returns only the needles—not the haystack—so you cut context bloat and cost without changing your agent.</p>
+                <p class="hero__description">A post-processing layer that wraps your MCP clients and returns only the needles - not the haystack - so you cut context bloat and cost without changing your agent.</p>
                 <div class="hero__buttons">
                     <button type="button" class="hero__btn" id="quickstart-btn" aria-expanded="false" aria-controls="hero-quickstart-terminal"><svg class="hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5a15.58 15.58 0 0 1-.5-6 15.58 15.58 0 0 1 .5-6M19.5 10.5a15.58 15.58 0 0 1 .5 6 15.58 15.58 0 0 1-.5 6M12 2v20"/></svg> Quickstart</button>
                     <a href="https://github.com/SalesforceAIResearch/MCP-Universe/mcpuniverse/extensions/mcpplus" class="hero__btn" target="_blank" rel="noopener"><svg class="hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> Code</a>
@@ -57,11 +58,11 @@
             <section id="about" aria-labelledby="about-heading">
                 <h2 id="about-heading">About</h2>
                 <p>The promise of Model Context Protocol (MCP) servers is seamless tool integration, but the reality is often indiscriminate context bloat. Every time an agent fetches a 1000-line HTML document just to find a single button's ID, you aren't just paying for those tokens once — the context bloat compounds with every subsequent turn in the conversation. The task agent is forced to find needles in the haystack while you foot the bill for the hay. This inflates costs, exhausts context windows, and distracts even the most capable LLMs.</p>
-                <p>To mitigate this context bloat, we built <strong>MCP+</strong>: a server-, agent-, and task-agnostic post-processing layer designed to sit as a protective wrapper around your MCP clients. Instead of forcing your primary task agent to sift through a mountain of hay, MCP+ intercepts the tool outputs and hands over only the needles.</p>
+                <p>To mitigate this context bloat, we built <strong>MCP+</strong>: a server-, agent-, and task-agnostic post-processing layer designed to sit as a protective wrapper around your MCP clients. Instead of forcing your primary task agent to sift through a mountain of hay, MCP+ intercepts the tool outputs and hands over only the needles. <strong>By delivering a highly condensed context window, it achieves comparable reasoning performance while slashing associated inference costs by up to 75%.</strong></p>
 
                 <figure class="article-figure">
                     <div id="flow-c" class="chart-container"></div>
-                    <figcaption>MCP+ pipeline: without vs with MCP+ (before/after).</figcaption>
+                    <figcaption>MCP+ pipeline: without vs with MCP+.</figcaption>
                 </figure>
 
                 <h3 id="expected-info">The power of the <code>expected_info</code> argument</h3>

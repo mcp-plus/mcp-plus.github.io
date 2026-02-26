@@ -17,7 +17,7 @@
     var scatterData = [
         { domain: "Playwright", model: "Claude 4.0 Sonnet", perfStd: 29.9, perfMcp: 30.7, costStd: 93.17, costMcp: 47.5 },
         { domain: "Playwright", model: "GPT-5", perfStd: 43.6, perfMcp: 38.5, costStd: 43.8, costMcp: 11.4 },
-        { domain: "Playwright", model: "Gemini-3-Pro", perfStd: 37.6, perfMcp: 0.0, costStd: 92.48, costMcp: 0.0 },
+        { domain: "Playwright", model: "Gemini-3-Pro", perfStd: 37.6, perfMcp: 35.6, costStd: 92.48, costMcp: 19.78 },
         { domain: "Yahoo Finance", model: "Claude 4.0 Sonnet", perfStd: 62.5, perfMcp: 66.7, costStd: 7.83, costMcp: 3.0 },
         { domain: "Yahoo Finance", model: "GPT-5", perfStd: 65.0, perfMcp: 70.8, costStd: 3.06, costMcp: 1.23 },
         { domain: "Yahoo Finance", model: "Gemini-3-Pro", perfStd: 62.5, perfMcp: 67.5, costStd: 5.93, costMcp: 1.96 },

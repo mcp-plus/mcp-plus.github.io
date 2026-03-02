@@ -41,7 +41,9 @@
 <span class="comment"># Set your API key</span>
 <span class="prompt">$ </span>export OPENAI_API_KEY=sk-...
 <span class="comment"># This creates -plus versions of all your MCP servers (e.g. github → github-plus).</span>
+<span class="comment"># Run with ~/.claude.json for Claude Code</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json
+
                     </div>
                 </div>           
             </div>
@@ -173,6 +175,7 @@ CODE-BASED EXTRACTION:
 <span class="prompt">$ </span>export OPENAI_API_KEY=sk-...
 
 <span class="comment"># Wrap your existing MCP servers (requires path to client's MCP config file)</span>
+<span class="comment"># E.g. Run with ~/.claude.json for Claude Code</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json
 
 <span class="comment"># This creates -plus versions of all your MCP servers (e.g. github → github-plus).</span>
@@ -183,7 +186,7 @@ CODE-BASED EXTRACTION:
 <span class="comment"># Adjust token threshold — MCP+ is invoked for responses beyond this length. If you specify a server, the threshold will apply only to that server.</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --token-threshold 300
 
-<span class="comment"># Use a different/cheaper model (default: gpt-4.1)</span>
+<span class="comment"># Use a different/cheaper model (default: gpt-5-mini)</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json --llm-model gpt-5-mini-2025-08-07
 
 <span class="comment"># Use Gemini instead of OpenAI</span>

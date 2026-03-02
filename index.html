@@ -137,20 +137,28 @@ CODE-BASED EXTRACTION:
                 <p>For developers using Cursor or Claude Code, context bloat is a direct drain on your innovation budget. When an MCP tool dumps 10,000 tokens of irrelevant metadata into your chat, it's stealing the tokens your model needs to refactor that function or debug that edge case.</p>
                 <p>MCP+ lets you do an economic arbitrage: by offloading the haystack sifting to a cheaper model, you preserve your premium Claude Opus 4.5 context for what actually matters — writing code. While this orchestration step introduces a small latency overhead, the tradeoff is a leaner, more focused, and significantly more cost-effective inference cycle.</p>
                 <p>
-                 <h4>Here's demo showcasing MCP+ in action in Cursor with Playwright:</h4>
+                 <h4>Here's a demo showcasing MCP+ in action in Cursor with Playwright:</h4>
                 <figure class="video-figure">
                     <div class="video-wrapper">
                         <iframe src="https://www.youtube.com/embed/ppcF7lHSluU?rel=0&modestbranding=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                     <figcaption>Demo: Cursor with Playwright - MCP+ in action.</figcaption>
                 </figure>
-                <h4>Here's demo showcasing MCP+ in action in Agentforce Vibes with DX MCP:</h4>
+                <h4>Here's a demo showcasing MCP+ in action in Claude Code with Context7:</h4>
+                <figure class="video-figure">
+                    <div class="video-wrapper">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/w1SOkWAcKik?si=Wl8ivbqWUHmNUUTf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <figcaption>Demo: Claude Code with Context7 - MCP+ in action.</figcaption>
+                </figure>
+                <h4>Here's a demo showcasing MCP+ in action in Agentforce Vibes with DX MCP:</h4>
                 <figure class="video-figure">
                     <div class="video-wrapper">
                         <iframe src="https://www.youtube.com/embed/i8lJVKzEILU?rel=0&modestbranding=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                     <figcaption>Demo: Agentforce Vibes with DX MCP - MCP+ in action.</figcaption>
                 </figure>
+
             </section>
 
             <section id="installation" aria-labelledby="installation-heading">
@@ -186,7 +194,7 @@ CODE-BASED EXTRACTION:
 
 <span class="comment"># Use Anthropic instead of OpenAI</span>
 <span class="prompt">$ </span>mcp-build-plus --mcp-config ~/.cursor/mcp.json \
-    --llm-provider anthropic \
+    --llm-provider claude \
     --llm-model claude-haiku-4-5-20251001 \
     --llm-api-key-env ANTHROPIC_API_KEY</div>
                 </div>
@@ -226,13 +234,16 @@ CODE-BASED EXTRACTION:
                     if (el) sections.push({ el: el, link: a });
                 });
                 function scrollTopFor(el) {
-                    return Math.max(0, el.offsetTop - headerHeight);
+                    var rect = el.getBoundingClientRect();
+                    return Math.max(0, rect.top + window.pageYOffset - headerHeight);
                 }
                 function setActive() {
-                    var top = main.scrollTop + headerHeight;
+                    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
                     var active = null;
                     for (var i = sections.length - 1; i >= 0; i--) {
-                        if (sections[i].el.offsetTop <= top) {
+                        var rect = sections[i].el.getBoundingClientRect();
+                        var sectionTop = rect.top + scrollY;
+                        if (sectionTop <= scrollY + headerHeight + 80) {
                             active = sections[i];
                             break;
                         }
@@ -246,16 +257,16 @@ CODE-BASED EXTRACTION:
                         e.preventDefault();
                         var id = a.getAttribute("data-section");
                         var el = document.getElementById(id);
-                        if (el && main) {
-                            main.scrollTo({ top: scrollTopFor(el), behavior: "smooth" });
+                        if (el) {
+                            window.scrollTo({ top: scrollTopFor(el), behavior: "smooth" });
                             if (history.replaceState) history.replaceState(null, "", "#" + id);
                         }
                     });
                 });
-                main.addEventListener("scroll", setActive, { passive: true });
+                window.addEventListener("scroll", setActive, { passive: true });
                 if (location.hash) {
                     var el = document.getElementById(location.hash.slice(1));
-                    if (el) main.scrollTop = scrollTopFor(el);
+                    if (el) window.scrollTo(0, scrollTopFor(el));
                 }
                 setActive();
             }
